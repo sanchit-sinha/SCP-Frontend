@@ -14,7 +14,7 @@ const Index = (props) => {
 
   useEffect(() => {
     // to set the fetched data
-    fetch("https://mockend.com/h4rSHp/fake-api/posts")
+    fetch("http://localhost:5000/interns")
       .then(response => response.json())
       .then(data => {
         setFetchedData(data)
@@ -24,41 +24,41 @@ const Index = (props) => {
 
 
   // Column Headers for the table
-  const columns = useMemo(() => [
-    {
-      Header: "Sr.No.",
-      Cell: ({ row }) => {
-        return <span>{parseInt(row.id) + 1}</span>
-      },
-    },
-    {
-      Header: "Organisation",
-      accessor: "organisation",
-    },
-    {
-      Header: "Profile",
-      accessor: "profile",
-    },
-    {
-      Header: "Eligibility",
-      accessor: "eligibility",
-      disableSortBy: true,
-    },
-    {
-      Header: "Deadline",
-      accessor: "deadline",
-      disableSortBy: true
-    },
-    {
-      Header: 'Details',
-      id: 'expander', // 'id' is required
-      Cell: ({ row }) => (
-        <Button color="primary" size="sm"{...row.getToggleRowExpandedProps()}>
-          {row.isExpanded ? ' -' : '+'}
-        </Button>
-      )
-    },
-  ], [])
+    const columns = useMemo(() => [
+        {
+            Header: "Sr.No.",
+            Cell: ({ row }) => {
+                return <span>{parseInt(row.id) + 1}</span>
+            },
+        },
+        {
+            Header: "Organisation",
+            accessor: "company",
+        },
+        {
+            Header: "Profile",
+            accessor: "role",
+        },
+        {
+            Header: "Internship Name",
+            accessor: "intern_name",
+            disableSortBy: true,
+        },
+        {
+            Header: "Deadline",
+            accessor: "deadline",
+            disableSortBy: true
+        },
+        {
+            Header: 'Details',
+            id: 'expander', // 'id' is required
+            Cell: ({ row }) => (
+                <Button color="primary" size="sm"{...row.getToggleRowExpandedProps()}>
+                    {row.isExpanded ? ' -' : '+'}
+                </Button>
+            )
+        },
+    ], [])
 
 
   return (

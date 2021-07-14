@@ -1,41 +1,57 @@
-import { type internshipData, type placementData } from "../types";
-import axios from "axios";
-const base_url = "http://localhost:5000";
+import {
+  storeInternshipData,
+  storePlacementData,
+} from "../actions/userActions";
 
-const sendRequest = async (url, method, body, headers = {}) => {
-  const response = await axios({
-    method,
-    url: base_url + url,
-    data: body,
-    headers,
-  });
-  console.log(response);
-  return response.data;
-};
+const base_url = "http://localhost:5000/";
+const EligibleInternships_url = "interns";
+const EligiblePlacements_url = "placements";
 
 // Login
-export const LOGIN = async (username, password) => {
-  await sendRequest("/users", "POST", {
-    username,
-    password,
+export const LOGIN = async (url, username, password) => {
+  const user = {
+    username: username,
+    password: password,
+  };
+
+  const res = await fetch(base_url + url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
   });
+
+  const response = await res.json();
+  return response;
 };
 
-// get User data
-export const getUserData = async () => {
-  const eligibleInternship = await getInternshipData();
-  const eligiblePlacement = await getPlacementData();
-  return { eligibleInternship, eligiblePlacement };
+// fetch internship data 
+export const fetchInternships = (url) => (dispatch) => {
+  fetch(base_url + EligibleInternships_url) // update url
+    .then((response) => response.json())
+    .then((data) => {
+      dispatch(UserInternshipData(data));
+    })
+    .catch((error) => console.log(error));
 };
 
-// Get eligible internships for a user
-export const getInternshipData = async (): Promise<Array<internshipData>> => {
-  const res = await sendRequest("/interns", "GET");
-  return res;
+// fetch placements data
+export const fetchPlacements = (url) => (dispatch) => {
+  fetch(base_url + EligiblePlacements_url) // update url
+    .then((response) => response.json())
+    .then((data) => {
+      dispatch(UserPlacementData(data));
+    })
+    .catch((error) => console.log(error));
 };
 
-// Get eligible placements for a user
-export const getPlacementData = async (): Promise<Array<placementData>> => {
-  const res = await sendRequest("/placements", "GET");
-  return res;
+// add internship data to redux
+export const UserInternshipData = (object) => (dispatch) => {
+  dispatch(storeInternshipData(object));
+};
+
+// add placement data to redux
+export const UserPlacementData = (object) => (dispatch) => {
+  dispatch(storePlacementData(object));
 };

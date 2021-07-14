@@ -7,11 +7,27 @@ export const initialState = Immutable.Map({
 const changeUserState = (state = initialState, action) => {
   switch (action.type) {
     case "LOGIN":
-      return state.set("authenticated", true);
+      return {
+        ...state,
+        authenticated: true,
+      };
     case "LOGOUT":
-      return state.set("authenticated", false);
+      return {
+        ...state,
+        authenticated: false,
+      };
+    case "USER_INTERNSHIP":
+      return {
+        ...state,
+        eligibleInternship: action.object,
+      };
+    case "USER_PLACEMENT":
+      return {
+        ...state,
+        eligiblePlacement: action.object,
+      };
     default:
-      return state.set("authenticated", false);
+      return state;
   }
 };
 
